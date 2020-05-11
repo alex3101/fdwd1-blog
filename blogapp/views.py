@@ -1,6 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView, CreateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 # Create your views here.
 class HomeView(TemplateView):
@@ -9,9 +13,41 @@ class HomeView(TemplateView):
     def get(self, request):
         return render(request, self.template_name)
 
+class SignUpView(TemplateView):
+    template_name = 'registration/signup.html'
+
+    def get(self, request):
+        form = UserCreationForm()
+        return render(request, self.template_name, {'form':form})
+    
+    def post(self, request):
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # mengambil input dari form
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return HttpResponseRedirect(reverse('dashboard'))
+        else:
+            return render(request, self.template_name, {'form':form})
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'management/dashboard.html'
 
     def get(self, request):
         return render(request, self.template_name)
+
+
+class CategoryAddView(CreateView):
+    pass
+    # using CreateView generic
+
+class PostCreateView(TemplateView):
+    pass
+    # using ModelForm
+
+class PostAllView(ListView):
+    pass
+    # using ListView

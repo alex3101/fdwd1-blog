@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from blogapp.views import HomeView, DashboardView
+from blogapp.views import HomeView, DashboardView, SignUpView
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')), # menginclude alamat2 utk authentication
     path('admin/', admin.site.urls),
+    path('signup/', SignUpView.as_view(), name='signup'),
     path('', HomeView.as_view(), name="home"),
     path('dashboard/', DashboardView.as_view(), name='dashboard' ),
 ]
