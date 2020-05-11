@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+from .forms import RegistrationForm, CategoryForm
+
 # Create your views here.
 class HomeView(TemplateView):
     template_name = 'index.html'
@@ -17,11 +19,11 @@ class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
 
     def get(self, request):
-        form = UserCreationForm()
+        form = RegistrationForm()
         return render(request, self.template_name, {'form':form})
     
     def post(self, request):
-        form = UserCreationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             # mengambil input dari form
@@ -40,9 +42,22 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name)
 
 
-class CategoryAddView(CreateView):
-    pass
-    # using CreateView generic
+class CategoryAddView(LoginRequiredMixin, TemplateView):
+    template_name = 'management/category_form.html'
+
+    def get(self, request):
+        form = CategoryForm()
+        return render(request, self.template_name, {'form':form})
+    
+    def post(self, request):
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('dashboard'))
+        else:
+            return render(request, self.template_name, {'form':form})
+
+
 
 class PostCreateView(TemplateView):
     pass

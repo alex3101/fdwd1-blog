@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from blogapp.views import HomeView, DashboardView, SignUpView
+from blogapp.views import HomeView, DashboardView, SignUpView, CategoryAddView
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')), # menginclude alamat2 utk authentication
@@ -24,6 +24,7 @@ urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
     path('', HomeView.as_view(), name="home"),
     path('dashboard/', DashboardView.as_view(), name='dashboard' ),
+    path('category/add/', CategoryAddView.as_view(), name='category-add'),
 ]
 
 # 127.0.0.1:8000/accounts/login
