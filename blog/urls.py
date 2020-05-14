@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
-from blogapp.views import HomeView, DashboardView, SignUpView, CategoryAddView
+from blogapp.views import HomeView, DashboardView, SignUpView, CategoryAddView, PostCreateView, PostAllView, CategoryListView, CategoryEditView
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')), # menginclude alamat2 utk authentication
@@ -25,7 +27,11 @@ urlpatterns = [
     path('', HomeView.as_view(), name="home"),
     path('dashboard/', DashboardView.as_view(), name='dashboard' ),
     path('category/add/', CategoryAddView.as_view(), name='category-add'),
-]
+    path('category/edit/<int:id>', CategoryEditView.as_view(), name='category-edit'),
+    path('categories/', CategoryListView.as_view(), name='category-list'),
+    path('post/create/', PostCreateView.as_view(), name='post-create'),
+    path('posts/', PostAllView.as_view(), name='post-all'),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # 127.0.0.1:8000/accounts/login
 # 127.0.0.1:8000/accounts/logout
