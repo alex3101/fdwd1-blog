@@ -73,4 +73,5 @@ target/
 .vagrant/
 
 
-riki_rhino/media/**
+/media/**
+media/**

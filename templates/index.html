@@ -2,6 +2,39 @@
 
 
 {% block content %}
-    <h1>Hello</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <h4 class="text-muted">LATEST POSTS</h4>
+                {% if posts %}
+                    
+                    {% for post in posts  %}
+                        <div class="py-4 border-bottom">
+                            <h3><a href="{% url 'post-detail' post.id %}">{{post.title}}</a></h3>
+                            <p class="text-muted">By {{post.author.first_name}} - {{post.category}}</p>
+                            <p>
+                                {{post.content}}
+                            </p>
+                        </div>
+                    {% endfor %}
+                        
+                    
+                {% endif %}
+                    
+            </div>
+            <div class="col-4">
+                <!-- tampilkan list dari categories -->
+                
+                {% if categories %}
+                    <ul class="list-unstyled">
+                        {% for category in categories %}
+                            <li><a href="#">{{category.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                    
+            </div>
+        </div>
+    </div>
 {% endblock content %}
     

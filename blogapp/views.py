@@ -15,7 +15,15 @@ class HomeView(TemplateView):
     template_name = 'index.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        posts = Post.objects.all().order_by('id')
+        categories = Category.objects.all().order_by('name')
+        return render(request, self.template_name, {'posts':posts, 'categories':categories})
+
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'post/post_detail.html'
+
 
 class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
@@ -67,11 +75,11 @@ class CategoryEditView(LoginRequiredMixin, TemplateView):
     id = None
 
     def get(self, request, id):
-        category = Category.objects.get(id=id)
-        if category:
+        try:
+            category = Category.objects.get(id=id)
             form = CategoryForm(instance=category)
             return render(request, self.template_name, {'form':form, 'category':category})
-        else:
+        except Exception as error:
             messages.error(request, "Category can't be found")
             return HttpResponseRedirect(reverse('category-list'))
 
@@ -101,3 +109,9 @@ class PostAllView(ListView):
     model=Post
     template_name='post/post_list.html'
     # using ListView
+
+class ProfileView(TemplateView):
+    template_name = 'profile.html'
+
+    def get(self, request):
+        return render(request, self.template_name)

@@ -18,17 +18,19 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from blogapp.views import HomeView, DashboardView, SignUpView, CategoryAddView, PostCreateView, PostAllView, CategoryListView, CategoryEditView
+from blogapp.views import HomeView, DashboardView, SignUpView, CategoryAddView, PostCreateView, PostAllView, CategoryListView, CategoryEditView, PostDetailView, ProfileView
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')), # menginclude alamat2 utk authentication
     path('admin/', admin.site.urls),
+    path('profile/', ProfileView.as_view(), name='profile'),
     path('signup/', SignUpView.as_view(), name='signup'),
     path('', HomeView.as_view(), name="home"),
     path('dashboard/', DashboardView.as_view(), name='dashboard' ),
     path('category/add/', CategoryAddView.as_view(), name='category-add'),
     path('category/edit/<int:id>', CategoryEditView.as_view(), name='category-edit'),
     path('categories/', CategoryListView.as_view(), name='category-list'),
+    path('posts/<int:pk>', PostDetailView.as_view(), name='post-detail'),
     path('post/create/', PostCreateView.as_view(), name='post-create'),
     path('posts/', PostAllView.as_view(), name='post-all'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

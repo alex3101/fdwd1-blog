@@ -12,8 +12,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-
-
 class Post(models.Model):
     STATUSES = (
         (0, 'Draft'),
@@ -27,3 +25,10 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts')
     image = models.ImageField(upload_to='posts', blank=True, null=True)
 
+    def __str__(self):
+        return self.title
+    
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True, null=True)
+    photo = models.ImageField(upload_to='profiles', blank=True, null=True)

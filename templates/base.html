@@ -34,16 +34,21 @@
                   <a class="nav-link" href="#">All Posts</a>
                 </li>
                 
+                {% if user.is_authenticated %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'category-list' %}">Categories</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Posts</a>
+                  </li>
+                {% endif %}
+                  
               </ul>
-              <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-              </form>
-              <div class="ml-4">
-                <ul class="list-inline ">
-                    
+              
+              <div class="ml-2">
+                <ul class="list-inline">
                     {% if user.is_authenticated %}
-                        <li class="list-inline-item"><a href="#">Hello {{user.first_name}}</a><li>
+                        <li class="list-inline-item"><a href="{% url 'profile' %}">Hello {{user.first_name}}</a><li>
                         <li class="list-inline-item"><a href="{% url 'logout' %}">Logout</a></li>
                     {% else %}
                         <li class="list-inline-item"><a href="{% url 'login' %}">Login</a></li>
@@ -56,6 +61,17 @@
           </nav>
     </div>
     <div class="container-fluid py-4">
+      {% if messages %}
+        <div class="row">
+            <div class="col-8">
+                
+                {% for msg in messages  %}
+                    <div class="alert {{msg.tags}}">{{msg}}</div>
+                {% endfor %}
+
+            </div>
+        </div>
+      {% endif %}
         {% block content %}{% endblock %}
     </div>
 </body>
