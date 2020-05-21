@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 
-from .forms import RegistrationForm, CategoryForm
+from .forms import RegistrationForm, CategoryForm, PostForm
 from .models import Post, Category
 
 # Create your views here.
@@ -15,7 +15,8 @@ class HomeView(TemplateView):
     template_name = 'index.html'
 
     def get(self, request):
-        posts = Post.objects.all().order_by('id')
+        # query post yang statusnya 1 = published
+        posts = Post.objects.filter(status=1).order_by('id')
         categories = Category.objects.all().order_by('name')
         return render(request, self.template_name, {'posts':posts, 'categories':categories})
 
@@ -102,13 +103,40 @@ class CategoryListView(LoginRequiredMixin, ListView):
     template_name = 'management/category_list.html'
     # context_object_name = 'categories'
 
-class PostCreateView(TemplateView):
-    pass
 
-class PostAllView(ListView):
+class PostAllView(LoginRequiredMixin, ListView):
     model=Post
     template_name='post/post_list.html'
-    # using ListView
+
+
+class PostEditView(LoginRequiredMixin, TemplateView):
+    template_name = 'post/post_edit.html'
+    id = None
+
+    def get(self, request, id):
+        try:
+            post = Post.objects.get(id=id)
+            form = PostForm(instance=post)
+            return render(request, self.template_name, {'form':form, 'post':post})
+        except Exception as error:
+            messages.error(request, error)
+            return HttpResponseRedirect(reverse('post-all'))
+
+    def post(self, request, id):
+        try:
+            post = Post.objects.get(id=id)
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                updated_post = form.save()
+                messages.success(request, "Post successfully updated")
+                return HttpResponseRedirect(reverse('post-all'))
+            else:
+                messages.error(request, "Please correct your input")
+                return render(request, self.template_name, {'form':form, 'post':post} )
+        except Exception as error:
+                messages.error(request, error)
+                return render(request, self.template_name, {'form':form, 'post':post} )
+
 
 class ProfileView(TemplateView):
     template_name = 'profile.html'

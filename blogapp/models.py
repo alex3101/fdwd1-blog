@@ -1,5 +1,5 @@
 from django.db import models
-
+from model_utils.models import TimeStampedModel
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -12,7 +12,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-class Post(models.Model):
+class Post(TimeStampedModel):
     STATUSES = (
         (0, 'Draft'),
         (1, 'Published'),
@@ -27,6 +27,8 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
     
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

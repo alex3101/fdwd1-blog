@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from blogapp.views import HomeView, DashboardView, SignUpView, CategoryAddView, PostCreateView, PostAllView, CategoryListView, CategoryEditView, PostDetailView, ProfileView
+from blogapp.views import HomeView, DashboardView, SignUpView, CategoryAddView, PostAllView, CategoryListView, CategoryEditView, PostDetailView, ProfileView, PostEditView
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')), # menginclude alamat2 utk authentication
@@ -31,8 +31,8 @@ urlpatterns = [
     path('category/edit/<int:id>', CategoryEditView.as_view(), name='category-edit'),
     path('categories/', CategoryListView.as_view(), name='category-list'),
     path('posts/<int:pk>', PostDetailView.as_view(), name='post-detail'),
-    path('post/create/', PostCreateView.as_view(), name='post-create'),
     path('posts/', PostAllView.as_view(), name='post-all'),
+    path('posts/<int:id>/edit/', PostEditView.as_view(), name='post-edit' ),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # 127.0.0.1:8000/accounts/login

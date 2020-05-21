@@ -2,14 +2,42 @@
 
 
 {% block content %}
-    
-    {% if object_list %}
-        {% for object in object_list %}
-            <div>
-                <img src="/media/{{object.image}}" alt="">
+    <h1>All Posts</h1>
+    <div class="row">
+        <div class="col-8">
+            <div class="text-right my-2">
+                <a href="#">Create new post</a>
             </div>
-        {% endfor %}
-    {% endif %}
+            {% if object_list %}
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Modified</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for object in object_list  %}
+                        <tr>
+                            <td>{{ object.title}}</td>
+                            <!-- get_namaAttribut_display utk menampilkan data yang manusiawi -->
+                            <td>{{ object.get_status_display }}</td>
+                            <td>{{ object.created }}</td>
+                            <td>{{ object.modified }}</td>
+                            <td><a href="{% url 'post-edit' object.id  %}">Edit</a></td>
+                        </tr>
+                    {% endfor %}
+                        
+                </tbody>
+            </table>
+            {% endif %}
+                
+        </div>
+    </div>
         
 {% endblock content %}
     
